@@ -1,5 +1,3 @@
-#QUESTIONS FOR DR. BABB:
-can I add git push heroku master to the github script?
 
 #install express
 sudo npm install -g express-generator
