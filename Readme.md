@@ -1,3 +1,6 @@
+#QUESTIONS FOR DR. BABB:
+can I add git push heroku master to the github script?
+
 #install express
 sudo npm install -g express-generator
 
@@ -58,14 +61,74 @@ heroku login
   
 #PUSH TO GITHUB USING SCRIPT FILE:
 -------------------------------------------------------------------
-#create a github.sh file:
+#!/bin/bash
 # helpful: http://stackoverflow.com/questions/8482843/git-commit-bash-script
 
 git add .
 read -p "Commit description: " desc
 git commit -m "$desc"
-git remote add origin git@github.com:rregalado93/#NAMEOFTHEREPOSITORY.git
+git remote add origin git@github.com:rregalado93/REPOSITORYNAME.git
 git push -u origin master
 -------------------------------------------------------------------        
+
 #Run
 sudo chmod 775 github.sh
+
+#create application in heroku
+heroku create
+
+#deploy app to heroku
+git push heroku master
+
+#start a web dyno in heroku
+heroku ps:scale web=1
+
+#add mongolab to heroku app
+heroku addons:add mongolab
+
+#get the database URI
+heroku config:get MONGOLAB_URI
+
+#URI components
+#mongodb://username:password@localhost:27027/database
+
+#create temp folder to dump data
+mkdir -p ~/tmp/mongodump
+
+# -h the host server (and port)
+# -d the database name
+# -o The output destination folder
+#dump the data
+mongodump -h localhost:27017 -d Loc8r -o ~/tmp/mongodump
+
+# -h Live host and port
+# -d Live database name
+# -u Username for the live database
+# -p Password for the live database
+#restore the data to live database
+mongorestore -h ds033669.mongolab.com:33669 -d heroku_app20110907 -u
+heroku_app20110907 -p PASSWORD ~/tmp/mongodump/DATABASENAME
+
+#Test the database live
+mongo hostname:port/database_name -u username -p password
+
+#ensure heroku is using production mode
+heroku config:set NODE_ENV=production
+
+#start application is production mode
+NODE_ENV=production nodemon
+
+
+#create app_api
+#add the following line to app.js
+app.use(express.static(path.join(__dirname, 'app_client' )));
+
+#googlemaps api key
+AIzaSyAYJGfNdgKDUms2-J3JsdmMtrArUDmT0D4 
+
+#googlemaps javascript api key
+AIzaSyBtv23YqVpbytDjlMOchYhca4oSrxyaRwI 
+
+
+#angular map
+https://github.com/allenhwkim/angularjs-google-maps
